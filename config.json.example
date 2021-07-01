@@ -1,3 +1,9 @@
 {
-    "BOT_TOKEN": ""
+    "BOT_TOKEN": "",
+    "BOT_PREFIX": "",
+    "TWITCH_CLIENTID": "",
+    "TWITCH_AUTHTORIZATION": "",
+    "BOT_CHANNELTWITCHMESSAGES": "",
+    "BOT_MESSAGEMODEL": "",
+    "STREAMERSLIVENOTIFICATION": ["example1", "example2"]
 }

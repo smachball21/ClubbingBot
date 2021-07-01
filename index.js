@@ -1,23 +1,21 @@
-// DISCORD
+// DISCORD IMPORTATION & CONFIG FILE
 const Discord = require("discord.js");
-const Commando = require("discord.js-commando");
 const config = require("./config.json");
-
 const client = new Discord.Client();
 const prefix = config.BOT_PREFIX;
 
-// CALL API
+// TWITCH API COMMUNICATIONS & REQUIREMENT
 const axios = require("axios");
 const tw_clientid = config.TWITCH_CLIENTID;
 const tw_secret = config.TWITCH_AUTHTORIZATION;
 const tw_botchannel = config.BOT_CHANNELTWITCHMESSAGES
 const tw_msgmodel = config.BOT_MESSAGEMODEL
 
-// STREAMER Array
-var streamer = ['clubbingmix', 'misterrayman21'];
+// STREAMERS NOTIFICATION ARRAYS
+var streamer = config.STREAMERSLIVENOTIFICATION;
 var isLive = []
 
-
+// WHEN DISCORD BOT IS READY
 client.on("ready", function(message) { 
 	console.log("ClubbingBot ready !");
 	
@@ -28,6 +26,8 @@ client.on("ready", function(message) {
 	asyncCall(client, tw_clientid, tw_secret);
 });
 
+
+// WHEN CLIENT TYPE COMMAND
 client.on("message", function(message) { 
     if (message.author.bot) return;
 	if (!message.content.startsWith(prefix)) return;	
@@ -43,17 +43,44 @@ client.on("message", function(message) {
 	
 });            
 
+//===== BASE FUNCTION ====\\
 // Sleep function
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }  
 
+// Parse string
+function parse(str) {
+    var args = [].slice.call(arguments, 1),
+        i = 0;
+
+    return str.replace(/%s/g, () => args[i++]);
+} 
+
+function parsewidth(str) {
+    var args = [].slice.call(arguments, 1),
+        i = 0;
+
+	return str.replace(/{width}/g, () => args[i++]);
+} 
+function parseheight(str) {
+    var args = [].slice.call(arguments, 1),
+        i = 0;
+
+	return str.replace(/{height}/g, () => args[i++]);
+} 
+//========================\\
+
+//===== COMMANDS FUNCTION ====\\
 
 // Get status of the bot (latency and alive)
 function ping(message) {
 	const timeTaken = Date.now() - message.createdTimestamp;
 	message.reply(`Pong! This message had a latency of ${timeTaken}ms.`);
 }	
+
+
+//--- TWITCH FUNCTION ---\\
 
 // Stream function
 async function streamnotification(client, clientid, secret) {
@@ -125,29 +152,7 @@ async function isInLive(client, clientid, secret, broadcaster_id) {
 	
 	return res;
 }
-
-
-// Parse string
-function parse(str) {
-    var args = [].slice.call(arguments, 1),
-        i = 0;
-
-    return str.replace(/%s/g, () => args[i++]);
-} 
-
-function parsewidth(str) {
-    var args = [].slice.call(arguments, 1),
-        i = 0;
-
-	return str.replace(/{width}/g, () => args[i++]);
-} 
-function parseheight(str) {
-    var args = [].slice.call(arguments, 1),
-        i = 0;
-
-	return str.replace(/{height}/g, () => args[i++]);
-} 
-
+//-------------------\\
 
 // Send Message
 function sendMessage(client, type, channelID, twitchname = null, twitchdisplayname = null, streamelement = null, userelement = null , message = null)
