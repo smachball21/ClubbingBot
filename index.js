@@ -133,7 +133,7 @@ async function streamnotification(client, clientid, secret) {
 			}
 		});		
 		
-		await sleep(10000);
+		await sleep(180000);
 	}
 }
 
