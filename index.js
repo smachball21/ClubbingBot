@@ -12,6 +12,10 @@ const tw_clientid = config.TWITCH_CLIENTID;
 const tw_secret = config.TWITCH_AUTHTORIZATION;
 
 
+// STREAMER Array
+var streamer = ['clubbingmix', 'misterrayman21'];
+
+
 client.on("ready", function(message) { 
 	console.log("ClubbingBot ready !");
 	
@@ -51,8 +55,15 @@ function ping(message) {
 
 // Stream function
 async function streamnotification(client, clientid, secret) {
+	let i = 0
+	let apilink = "https://api.twitch.tv/helix/users";
+	streamer.forEach(element => {
+		i++;
+		console.log(i+':'+element);
+	});
+	
     const config = {
-		url: 'https://api.twitch.tv/helix/users?login=juliabayonetta_',		
+		url: 'https://api.twitch.tv/helix/users?login=clubbingmix&login=misterrayman21',		
 	    method: 'GET',
 	    headers: {
 			'Client-ID': clientid,
@@ -61,11 +72,26 @@ async function streamnotification(client, clientid, secret) {
     }
 
     let res = await axios(config)
-	let broadcaster_id = res.data.data[0].id;
+	
+	var array = res.data.data
+	
+	array.forEach( element => {
+		console.log(element.id);
+	});
+
+	var broadcaster_id = res.data.data.id;
 	
 	console.log(broadcaster_id);
+		
+    var inlive = await isInLive(client, clientid, secret, broadcaster_id);
 	
-	let inlive = isInLive(client, clientid, secret, broadcaster_id);
+	if (inlive.data.data && !inlive.data.data.length) {
+		console.log("empty");
+	}
+	else
+	{
+		console.log("datas present");
+	}
 
 	while (true) {
 		
@@ -86,7 +112,7 @@ async function isInLive(client, clientid, secret, broadcaster_id) {
 	
 	let res = await axios(config)
 	
-	console.log(res.data);
+	return res;
 }
 
 
