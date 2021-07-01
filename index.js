@@ -59,11 +59,19 @@ async function streamnotification(client, clientid, secret) {
 	let apilink = "https://api.twitch.tv/helix/users";
 	streamer.forEach(element => {
 		i++;
-		console.log(i+':'+element);
+		
+		if (i === 1)
+		{
+			apilink += "?login="+element
+		}
+		else
+		{
+			apilink += "&login="+element
+		}
 	});
 	
     const config = {
-		url: 'https://api.twitch.tv/helix/users?login=clubbingmix&login=misterrayman21',		
+		url: apilink,		
 	    method: 'GET',
 	    headers: {
 			'Client-ID': clientid,
