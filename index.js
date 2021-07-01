@@ -1,21 +1,25 @@
+// DISCORD
 const Discord = require("discord.js");
+const Commando = require("discord.js-commando");
 const config = require("./config.json");
 
 const client = new Discord.Client();
+const prefix = config.BOT_PREFIX;
 
-const prefix = "c!";
+// CALL API
+const axios = require("axios");
+const tw_clientid = config.TWITCH_CLIENTID;
+const tw_secret = config.TWITCH_AUTHTORIZATION;
+
 
 client.on("ready", function(message) { 
 	console.log("ClubbingBot ready !");
 	
-	async function asyncCall() {
-	  const result = await streamnotification();
+	async function asyncCall(client, tw_clientid, tw_secret) {
+	  const result = await streamnotification(client, tw_clientid, tw_secret);
 	  console.log(result);
 	}
-	
-	asyncCall();
-	
-	
+	asyncCall(client, tw_clientid, tw_secret);
 });
 
 client.on("message", function(message) { 
@@ -46,11 +50,44 @@ function ping(message) {
 }	
 
 // Stream function
-async function streamnotification(client, message) {
-	i = 1;
+async function streamnotification(client, clientid, secret) {
+    const config = {
+		url: 'https://api.twitch.tv/helix/users?login=juliabayonetta_',		
+	    method: 'GET',
+	    headers: {
+			'Client-ID': clientid,
+			'Authorization': 'Bearer '+ secret
+	    }
+    }
+
+    let res = await axios(config)
+	let broadcaster_id = res.data.data[0].id;
+	
+	console.log(broadcaster_id);
+	
+	let inlive = isInLive(client, clientid, secret, broadcaster_id);
+
 	while (true) {
-		console.log('test');
-		await sleep(30000);
+		
+		await sleep(3000);
 	}
 }
+
+// Get Broadcaster is in live
+async function isInLive(client, clientid, secret, broadcaster_id) {
+    const config = {
+		url: 'https://api.twitch.tv/helix/streams?user_id='+broadcaster_id,		
+	    method: 'GET',
+	    headers: {
+			'Client-ID': clientid,
+			'Authorization': 'Bearer '+ secret
+	    }
+    }	
+	
+	let res = await axios(config)
+	
+	console.log(res.data);
+}
+
+
 client.login(config.BOT_TOKEN);
