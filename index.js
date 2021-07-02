@@ -24,6 +24,16 @@ client.on("ready", function(message) {
 	  console.log(result);
 	}
 	asyncCall(client, tw_clientid, tw_secret);
+	
+	client.user.setPresence({
+		status: 'dnd',
+		activity: {
+		  name: "http://twitch.tv/clubbingmix",
+		  type: "WATCHING"
+		}
+    });
+	
+	//client.user.setActivity('https://t.tv/clubbingmix');
 });
 
 
