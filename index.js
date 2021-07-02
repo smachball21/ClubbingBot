@@ -87,6 +87,16 @@ function parseheight(str) {
 
 	return str.replace(/{height}/g, () => args[i++]);
 } 
+
+function remove(arr, what) {
+    var found = arr.indexOf(what);
+
+    while (found !== -1) {
+        arr.splice(found, 1);
+        found = arr.indexOf(what);
+    }
+}
+
 //========================\\
 
 //===== COMMANDS FUNCTION ====\\
@@ -163,7 +173,7 @@ async function streamnotification(client, clientid, secret) {
 			if (inlive.data.data && !inlive.data.data.length) {				
 				if (! isLive.indexOf(element.login)) {
 					console.log(element.login+' stop his live')
-					isLive.pop(element.login)
+					remove(isLive, element.login);
 				}			
 			}
 			else
