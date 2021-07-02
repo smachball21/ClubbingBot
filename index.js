@@ -109,7 +109,19 @@ function whoislive(client, message) {
 
 // Get all commands
 function help(client, message) {
-	sendMessage(client, "help", null, null, null, null, null, message)
+	const helpEmbed = new Discord.MessageEmbed()
+		.setColor('#6441a5')
+		.setTitle("ClubbingBot Commands")
+		.setDescription("List of all commands")
+		.addFields(
+			{ name: '\u200B', value: '\u200B' },
+			{ name: prefix+'help', value: 'Get help embed message' },
+			{ name: prefix+'ping', value: 'Check bot presence', inline: false },
+			{ name: prefix+'whoislive', value: 'Check if one streamer of defined list is on live', inline: false },
+		)
+		.setTimestamp()		
+		
+	message.reply(helpEmbed);
 }
 
 //--- TWITCH FUNCTION ---\\
@@ -189,26 +201,6 @@ async function isInLive(client, clientid, secret, broadcaster_id) {
 // Send Message
 function sendMessage(client, type, channelID = null , twitchname = null, twitchdisplayname = null, streamelement = null, userelement = null , message = null)
 {
-
-
-	if (type = "help") {
-		const helpEmbed = new Discord.MessageEmbed()
-			.setColor('#6441a5')
-			.setTitle("ClubbingBot Commands")
-			.setDescription("List of all commands")
-			.addFields(
-				{ name: '\u200B', value: '\u200B' },
-				{ name: prefix+'help', value: 'Get help embed message' },
-				{ name: prefix+'ping', value: 'Check bot presence', inline: false },
-				{ name: prefix+'whoislive', value: 'Check if one streamer of defined list is on live', inline: false },
-			)
-			.setTimestamp()		
-			
-		message.reply(helpEmbed);
-		
-		return true;
-	}
-	
 	if (type = "twitch"){
 		if (twitchdisplayname == null){ twitchdisplayname = twitchname};
 
