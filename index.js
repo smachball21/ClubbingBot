@@ -168,7 +168,7 @@ async function streamnotification(client, clientid, secret) {
 			}
 			else
 			{
-				if (! isLive.indexOf(element.login)) {
+				if ( isLive.indexOf(element.login) === -1) {
 					isLive.push(element.login)
 					
 					console.log(element.login+' is now living')
