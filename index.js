@@ -41,6 +41,14 @@ client.on("message", function(message) {
 		ping(message);
 	}
 	
+	if (command === "whoislive"){
+		whoislive(client, message);
+	}
+	
+	if (command === "help") {
+		help(client, message);
+	}
+	
 });            
 
 //===== BASE FUNCTION ====\\
@@ -79,6 +87,20 @@ function ping(message) {
 	message.reply(`Je suis la ! Ma latence est de ${timeTaken}ms.`);
 }	
 
+// Get list on live strealer
+function whoislive(client, message) {
+	if (isLive && !isLive.length) {
+		message.reply("Personne ne live actuellement !");
+	}
+	else {
+		message.reply(isLive + " sont entrain de live maintenant !");
+	}
+}
+
+// Get all commands
+function help(client, message) {
+	console.log("Help command");
+}
 
 //--- TWITCH FUNCTION ---\\
 
