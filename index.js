@@ -76,7 +76,7 @@ function parseheight(str) {
 // Get status of the bot (latency and alive)
 function ping(message) {
 	const timeTaken = Date.now() - message.createdTimestamp;
-	message.reply(`Pong! This message had a latency of ${timeTaken}ms.`);
+	message.reply(`Je suis la ! Ma latence est de ${timeTaken}ms.`);
 }	
 
 
