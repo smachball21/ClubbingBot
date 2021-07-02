@@ -17,5 +17,5 @@ Configuration of config.json :
 
 Commands :
  - c!help : Get commands list (work in progress)
- - c!ping : Get latency of bot
+ - c!ping : Get bot latency
  - c!whoislive : Check who is live in the defined list in config.json
