@@ -13,7 +13,7 @@ Configuration of config.json :
  - "TWITCH_AUTHTORIZATION" = Twitch authorization key
  - "BOT_CHANNELTWITCHMESSAGES" = Discord ChannelID for get live notification
  - "BOT_MESSAGEMODEL" = Define model of message with %s for parsing data (2 args required)
- - "STREAMERSLIVENOTIFICATION" = Define streamer check for live notifications
+ - "STREAMERSLIVENOTIFICATION" = Define streamer check for live notifications (username can be found on twitch url)
 
 Commands :
  - c!help : Get commands list (work in progress)
