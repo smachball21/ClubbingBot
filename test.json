@@ -1,0 +1,9 @@
+{
+    "BOT_TOKEN": "ODQxNTgxNDEyNDYwNzg5Nzkx.YJo1xA.hcrJ7vHIG3bAO4yQPs546EUlI0Y",
+    "BOT_PREFIX": "c!",
+    "TWITCH_CLIENTID": "gp762nuuoqcoxypju8c569th9wz7q5",
+    "TWITCH_AUTHTORIZATION": "kitk31ny89mz2f7r0xyqp34k9cr8l3",
+    "BOT_CHANNELTWITCHMESSAGES": "817042505920675870",
+    "BOT_MESSAGEMODEL": "Hey ! %s est en live ici : https://www.twitch.tv/%s ! N'hesitez pas à rejoindre !",
+    "STREAMERSLIVENOTIFICATION": ["clubbingmix", "carorockwell", "cedixtv", "adrienlinuxtricks", "alexkakomusic", "djmast", "reorderdj", "dj_fred_live", "laurentsimeon_ls"]
+}

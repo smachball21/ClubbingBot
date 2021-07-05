@@ -1,3 +1,6 @@
+// NEEDED PACKAGES
+const fs = require("fs");
+
 // DISCORD IMPORTATION & CONFIG FILE
 const Discord = require("discord.js");
 const config = require("./config.json");
@@ -46,19 +49,51 @@ client.on("message", function(message) {
 	const args = commandBody.split(' ');
 	const command = args.shift().toLowerCase();
 	
-	// Commands
+	// Basic Commands
 	if (command === "ping") {
 		ping(message);
 	}
 	
-	if (command === "whoislive"){
-		whoislive(client, message);
-	}
-	
 	if (command === "help") {
-		help(client, message);
+		
+		if (! args[0])
+		{
+			help(client, message);
+		}
+		else if ( args[0] === "twitch") 
+		{
+			helpTwitch(client, message);
+		}
+		
 	}
 	
+	// Live commands
+	if (command === "twitch"){
+		if (args[0] === "notification")
+		{
+			if (args[1])
+			{
+				if (args[1] === "addstreamer") 
+				{
+					addstreamer(client, message, args[2]);
+				}
+				
+				if (args[1] === "removestreamer")
+				{
+					removestreamer(client, message, args[2]);
+				}
+				
+				if (args[1] === "list")
+				{
+					liststreamers(client, message)
+				}
+			}
+			else
+			{
+				message.reply("Please specify a type of notification between : `"+prefix+"twitch notification {addstreamer, removestreamer & list}`")
+			}			
+		}
+	}
 });            
 
 //===== BASE FUNCTION ====\\
@@ -97,6 +132,15 @@ function remove(arr, what) {
     }
 }
 
+function writeToJSON(data, file)
+{
+}
+
+
+function wip(client, message)
+{
+	message.reply("This functionnality is work in progress. Please wait the new update or call MisterRaymAn21");
+}
 //========================\\
 
 //===== COMMANDS FUNCTION ====\\
@@ -125,13 +169,30 @@ function help(client, message) {
 		.setDescription("List of all commands")
 		.addFields(
 			{ name: '\u200B', value: '\u200B' },
-			{ name: prefix+'help', value: 'Get help embed message' },
+			{ name: prefix+'help {command}', value: 'Get help embed message' },
 			{ name: prefix+'ping', value: 'Check bot presence', inline: false },
+			{ name: '\u200B', value: '\u200B' },
 			{ name: prefix+'whoislive', value: 'Check if one streamer of defined list is on live', inline: false },
+			{ name: prefix+'twitch {commands}', value: 'twitch & bot manager', inline: false },
 		)
 		.setTimestamp()		
 		
 	message.reply(helpEmbed);
+}
+
+function helpTwitch(client, message)
+{
+	const helpEmbed = new Discord.MessageEmbed()
+		.setColor('#6441a5')
+		.setTitle("ClubbingBot Commands")
+		.setDescription("List of twitch commands")
+		.addFields(
+			{ name: '\u200B', value: '\u200B' },
+			{ name: prefix+'twitch notification {addstreamer, removestreamer, list}', value: 'Manage streamers notifications', inline: false },
+		)
+		.setTimestamp()		
+		
+	message.reply(helpEmbed);	
 }
 
 //--- TWITCH FUNCTION ---\\
@@ -190,6 +251,106 @@ async function streamnotification(client, clientid, secret) {
 		await sleep(180000);
 	}
 }
+
+async function addstreamer(client, message, streamername)
+{
+	if (streamername)
+	{
+		// CHECK PRESENCE OF STREAMERNAME IN JSON FILE		
+		if (checkJSONpresence(streamername) === false)
+		{
+			// CHECK PRESENCE OF STREAMER IN TWITCH
+			const tw_presence = await checkTWITCHpresence(streamername, tw_clientid,tw_secret)
+			if (tw_presence === true)
+			{
+				// ADD STREAMER IN CONFIG FILE
+				wip(client,message);
+			}
+			else
+			{
+				message.reply("The streamername `"+streamername+"` was not found in twitch. Make sure the streamer name is correct ! ");
+			}			
+		}
+		else
+		{
+			message.reply("This streamer is already added. Please use `"+prefix+"twitch notification list` for see the streamers list");
+		}
+	}
+	else
+	{
+		message.reply("Please specify a streamer name");
+	}
+}
+
+function removestreamer(client, message, streamername)
+{	
+	if (streamername)
+	{
+		// CHECK PRESENCE OF STREAMERNAME IN JSON FILE	
+		if (checkJSONpresence(streamername) === true)
+		{
+			wip(client,message);
+		}
+		else
+		{
+			message.reply("The streamer name is not on the streamer list. Please use `"+prefix+"twitch notification list` for see the streamers list");
+		}
+	}
+	else
+	{
+		message.reply("Please specify a streamer name");
+	}
+}
+
+function liststreamers(client, message)
+{
+	let streamersMSG = "**List of users twitch notifications :**"
+	streamer.forEach( (elm) => {
+		streamersMSG += "\n "+elm+",";
+	});
+	
+	
+	streamersMSG += "\n\n If you want to add more streamers you can type : `"+prefix+"twitch notification addstreamer {streamername}`";
+	streamersMSG += "\n If you want to remove one streamers you can type : `"+prefix+"twitch notification removestreamer {streamername}`";
+	message.reply(streamersMSG);
+}
+
+
+function checkJSONpresence(streamername)
+{
+	if (streamer.indexOf(streamername) != -1 )
+	{
+		return true
+	}
+	else
+	{
+		return false
+	}
+}
+
+async function checkTWITCHpresence(streamername, clientid, secret)
+{
+    const config = {
+		url: 'https://api.twitch.tv/helix/users?login='+streamername,		
+	    method: 'GET',
+	    headers: {
+			'Client-ID': clientid,
+			'Authorization': 'Bearer '+ secret
+	    }
+    }	
+	
+	let res = await axios(config)
+	
+	if (Array.isArray(res.data.data) && res.data.data.length)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+			
 
 // Get Broadcaster is in live
 async function isInLive(client, clientid, secret, broadcaster_id) {
