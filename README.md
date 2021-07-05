@@ -16,6 +16,11 @@ Configuration of config.json :
  - "STREAMERSLIVENOTIFICATION" = Define streamer check for live notifications (username can be found on twitch url)
 
 Commands :
+
+** Basics Commands :**
  - c!help : Get commands list
  - c!ping : Get bot latency
+
+** Stream Commands :**
  - c!whoislive : Check who is live in the defined list in config.json
+ - c!twitch notification {addstreamer, removestreamer, list} : Add / Remove and list streamer active for notifications
