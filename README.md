@@ -23,4 +23,4 @@ Commands :
 
 ** Stream Commands :**
  - c!whoislive : Check who is live in the defined list in config.json
- - c!twitch notification {addstreamer, removestreamer, list} : Add / Remove and list streamer active for notifications
+ - c!twitch notification {addstreamer (work in progress), removestreamer (work in progress), list} : Add / Remove and list streamer active for notifications
