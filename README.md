@@ -17,10 +17,11 @@ Configuration of config.json :
 
 Commands :
 
-** Basics Commands :**
+** Basics Commands : **
  - c!help : Get commands list
  - c!ping : Get bot latency
 
-** Stream Commands :**
+** Stream Commands : **
  - c!whoislive : Check who is live in the defined list in config.json
  - c!twitch notification {addstreamer, removestreamer, list} : Add / Remove and list streamer active for notifications
+ - c!twitch modelmsg : Change live notification message (1st %s == Twitch Display Name && 2nd %s == Twitch login name)
