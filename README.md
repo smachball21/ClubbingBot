@@ -5,6 +5,7 @@ How to install :
  - Do `npm install`
  - Copy `config.json.example` to `config.json`
  - Start the bot using `node index.js` 
+ - Create role named `BOT ACCESS` for access to bot management (if u don't have this role, u can't use bot commands)
 
 Configuration of config.json : 
  - "BOT_TOKEN" = Discord Bot secret token
