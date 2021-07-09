@@ -19,6 +19,8 @@ const tw_msgmodel = config.BOT_MESSAGEMODEL
 var streamer = config.STREAMERSLIVENOTIFICATION;
 var isLive = []
 
+
+//============================================== BOT READY =================================================\\
 // WHEN DISCORD BOT IS READY
 client.on("ready", function(message) { 
 	console.log("ClubbingBot ready !");
@@ -37,8 +39,10 @@ client.on("ready", function(message) {
 		}
     });
 });
+//============================================== BOT READY =================================================//
 
 
+//============================================== COMMANDS LIST =================================================\\
 // WHEN CLIENT TYPE COMMAND
 client.on("message", function(message) { 
     if (message.author.bot) return;
@@ -104,7 +108,9 @@ client.on("message", function(message) {
 
 		
 	}
-});            
+});  
+
+//============================================== COMMANDS FUNCTION ============================================//        
 
 //===== BASE FUNCTION ====\\
 // Sleep function
