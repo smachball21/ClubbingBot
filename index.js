@@ -211,6 +211,7 @@ function helpTwitch(client, message)
 		.addFields(
 			{ name: '\u200B', value: '\u200B' },
 			{ name: prefix+'twitch notification {addstreamer, removestreamer, list}', value: 'Manage streamers notifications', inline: false },
+			{ name: prefix+"msgmodel", value: "Change model of live notification", inline: false}
 		)
 		.setTimestamp()		
 		
@@ -319,7 +320,7 @@ function removestreamer(client, message, streamername, config, filename)
 			var dataArray = config.STREAMERSLIVENOTIFICATION
 			remove(dataArray, streamername)
 			
-			if (Array.isArray(dataArray) && dataArray.length)
+			if (Array.isArray(dataArray) && ! dataArray.length)
 			{
 				config.STREAMERSLIVENOTIFICATION = []
 			}
