@@ -93,6 +93,10 @@ client.on("message", function(message) {
 				message.reply("Please specify a type of notification between : `"+prefix+"twitch notification {addstreamer, removestreamer & list}`")
 			}			
 		}
+		else if (args[0] === "msgmodel")
+		{
+			changeStreamMSG(client, message, config, jsonfile)
+		}
 	}
 	
 	if (command === "test") 
@@ -327,9 +331,6 @@ function removestreamer(client, message, streamername, config, filename)
 			// AJOUTER LE CONTROLE DES ERREURS
 			writeToJSON(config, filename)
 			message.reply("The streamer `"+streamername+"` has been removed successfully !")
-
-			
-			
 		}
 		else
 		{
@@ -406,6 +407,48 @@ async function isInLive(client, clientid, secret, broadcaster_id) {
 	let res = await axios(config)
 	
 	return res;
+}
+
+
+function changeStreamMSG(client, message, config, filename)
+{
+	let filter = m => m.author.id === message.author.id
+	var curChannel = client.channels.cache.get(message.channel.id);
+	curChannel.send("📑 -  Please write your message model for live notification (1st %s = Twitch display name, 2nd %s = Twitch login name) ").then( () => {
+		message.channel.awaitMessages(filter, {
+			max: 1,
+			time: 30000,
+			errors: ['time']
+		}).then(message => {
+			message = message.first()
+			
+			curChannel.send("Do you want to confirm your choice ?").then( (message2) => {
+
+				message2.react('✅').then(() => message2.react('❌'));
+			
+				const filter = (reaction, user) => {
+					return ['✅', '❌'].includes(reaction.emoji.name) && user.id !== message2.author.id;
+				};
+				
+				message2.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] }).then(collected => {
+					const reaction = collected.first();
+					if (reaction.emoji.name === '✅') {
+						// AJOUTER LE CONTROLE DES ERREURS
+						config.BOT_MESSAGEMODEL = message.content;
+						writeToJSON(config, filename)
+						
+						curChannel.send('✅ - Notification model message has been updated successfully !');
+						return true;
+					} else {
+						curChannel.send('❌ - You canceled all changes !');
+						return false;
+					}					
+				});
+			});	
+		}).catch(collected => {
+			message.reply('❌ - All changes has been canceled !');
+		});
+	});
 }
 //-------------------\\
 
