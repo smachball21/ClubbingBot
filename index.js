@@ -3,7 +3,8 @@ const fs = require("fs");
 
 // DISCORD IMPORTATION & CONFIG FILE
 const Discord = require("discord.js");
-const config = require("./config.json");
+const jsonfile = "./config.json"
+const config = require(jsonfile);
 const client = new Discord.Client();
 const prefix = config.BOT_PREFIX;
 
@@ -35,8 +36,6 @@ client.on("ready", function(message) {
 		  type: "WATCHING"
 		}
     });
-	
-	//client.user.setActivity('https://t.tv/clubbingmix');
 });
 
 
@@ -68,19 +67,20 @@ client.on("message", function(message) {
 	}
 	
 	// Live commands
-	if (command === "twitch"){
+	if (command === "twitch")
+	{
 		if (args[0] === "notification")
 		{
 			if (args[1])
 			{
 				if (args[1] === "addstreamer") 
 				{
-					addstreamer(client, message, args[2]);
+					addstreamer(client, message, args[2], config, jsonfile);
 				}
 				
 				if (args[1] === "removestreamer")
 				{
-					removestreamer(client, message, args[2]);
+					removestreamer(client, message, args[2], config, jsonfile);
 				}
 				
 				if (args[1] === "list")
@@ -93,6 +93,12 @@ client.on("message", function(message) {
 				message.reply("Please specify a type of notification between : `"+prefix+"twitch notification {addstreamer, removestreamer & list}`")
 			}			
 		}
+	}
+	
+	if (command === "test") 
+	{
+
+		
 	}
 });            
 
@@ -134,6 +140,17 @@ function remove(arr, what) {
 
 function writeToJSON(data, file)
 {
+	var dataStringify = JSON.stringify(data, null,4);
+	
+	fs.writeFile(file, dataStringify, 'utf-8', function (err) {
+		if (err)
+		{
+			console.log("An error occured while writing JSON Object to File. function writeToJSON()");
+			return false;		
+		}
+		
+		return true;
+	});
 }
 
 
@@ -141,6 +158,7 @@ function wip(client, message)
 {
 	message.reply("This functionnality is work in progress. Please wait the new update or call MisterRaymAn21");
 }
+
 //========================\\
 
 //===== COMMANDS FUNCTION ====\\
@@ -252,7 +270,7 @@ async function streamnotification(client, clientid, secret) {
 	}
 }
 
-async function addstreamer(client, message, streamername)
+async function addstreamer(client, message, streamername, config, filename)
 {
 	if (streamername)
 	{
@@ -264,7 +282,11 @@ async function addstreamer(client, message, streamername)
 			if (tw_presence === true)
 			{
 				// ADD STREAMER IN CONFIG FILE
-				wip(client,message);
+				config.STREAMERSLIVENOTIFICATION.push(streamername);
+				writeToJSON(config, filename)
+				
+				// AJOUTER LE CONTROLE DES ERREURS
+				message.reply("The streamer `"+streamername+"` has been added successfully !")
 			}
 			else
 			{
@@ -282,14 +304,32 @@ async function addstreamer(client, message, streamername)
 	}
 }
 
-function removestreamer(client, message, streamername)
+function removestreamer(client, message, streamername, config, filename)
 {	
 	if (streamername)
 	{
 		// CHECK PRESENCE OF STREAMERNAME IN JSON FILE	
 		if (checkJSONpresence(streamername) === true)
 		{
-			wip(client,message);
+			
+			var dataArray = config.STREAMERSLIVENOTIFICATION
+			remove(dataArray, streamername)
+			
+			if (Array.isArray(dataArray) && dataArray.length)
+			{
+				config.STREAMERSLIVENOTIFICATION = []
+			}
+			else 
+			{
+				config.STREAMERSLIVENOTIFICATION = dataArray
+			}
+			
+			// AJOUTER LE CONTROLE DES ERREURS
+			writeToJSON(config, filename)
+			message.reply("The streamer `"+streamername+"` has been removed successfully !")
+
+			
+			
 		}
 		else
 		{
