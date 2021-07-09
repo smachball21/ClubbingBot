@@ -46,6 +46,7 @@ client.on("ready", function(message) {
 // WHEN CLIENT TYPE COMMAND
 client.on("message", function(message) { 
     if (message.author.bot) return;
+	if (!message.member.roles.cache.find(r => r.name === "BOT ACCESS") ) return ;
 	if (!message.content.startsWith(prefix)) return;	
 	
 	const commandBody = message.content.slice(prefix.length);
