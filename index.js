@@ -104,10 +104,9 @@ client.on("message", function(message) {
 		}
 	}
 	
-	if (command === "test") 
+	if (command === "whoislive") 
 	{
-
-		
+		whoislive(client,message)
 	}
 });  
 
